@@ -1,5 +1,5 @@
-PACKS=lwt,lwt.syntax,lwt.unix,stdext
-OBJS=helpers iteratees lwt_support test websockets wsproxy
+PACKS=lwt,lwt.syntax,lwt.unix,re.str
+OBJS=base64 helpers iteratees lwt_support test websockets wsproxy
 OCAMLC=ocamlc
 OCAMLOPT=ocamlopt
 OCAMLFIND=ocamlfind
@@ -45,15 +45,15 @@ lwt_support.cmo: iteratees.cmi lwt_support.cmi
 lwt_support.cmx: iteratees.cmx lwt_support.cmi
 test.cmo: iteratees.cmi test.cmi
 test.cmx: iteratees.cmx test.cmi
-websockets.cmo: test.cmi iteratees.cmi helpers.cmi websockets.cmi
-websockets.cmx: test.cmx iteratees.cmx helpers.cmx websockets.cmi
+websockets.cmo: test.cmi iteratees.cmi helpers.cmi websockets.cmi base64.cmi
+websockets.cmx: test.cmx iteratees.cmx helpers.cmx websockets.cmi base64.cmi
 wsproxy.cmo: websockets.cmi lwt_support.cmi wsproxy.cmi
 wsproxy.cmx: websockets.cmx lwt_support.cmx wsproxy.cmi
 helpers.cmi:
 iteratees.cmi:
 lwt_support.cmi: iteratees.cmi
 test.cmi:
-websockets.cmi: iteratees.cmi
+websockets.cmi: iteratees.cmi base64.cmi
 wsproxy.cmi:
 
 

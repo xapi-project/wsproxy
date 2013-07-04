@@ -80,7 +80,8 @@ let proxy (fd : Lwt_unix.file_descr) protocol ty localport =
 
 let handler sock msg =
   lwt _ = Lwt_io.printf "Got msg: %s\n" msg in
-  match Stringext.String.split ':' msg with
+  let colon = Re_str.regexp_string ":" in
+  match Re_str.split_delim colon msg with
     | [protocol;ty;sport] ->
       let port = int_of_string sport in
       proxy sock protocol ty port
