@@ -27,19 +27,17 @@ module Wsprotocol (IO : Iteratees.Monad) = struct
   let writer = I.writer
 
   let wsframe s = modify (fun s ->
-    let mask = Random.int32 Int32.max_int in
-    let mask = Helpers.marshal_int32 mask in
     let l = String.length s in
     if l < 126 
     then 
-      Printf.sprintf "%c%c%s%s" (char_of_int 0x82) (char_of_int (l+128)) mask (Helpers.unmask mask s)
+      Printf.sprintf "%c%c%s" (char_of_int 0x82) (char_of_int l) s
     else if l < 65535 
     then
-      Printf.sprintf "%c%c%s%s%s" (char_of_int 0x82) (char_of_int (126+128))
-	(Helpers.marshal_int16 l) mask (Helpers.unmask mask s)
+      Printf.sprintf "%c%c%s%s" (char_of_int 0x82) (char_of_int 126)
+	(Helpers.marshal_int16 l) s
     else
-      Printf.sprintf "%c%c%s%s%s" (char_of_int 0x82) (char_of_int 127)
-	(Helpers.marshal_int32 (Int32.of_int l)) mask (Helpers.unmask mask s)) s
+      Printf.sprintf "%c%c%s%s" (char_of_int 0x82) (char_of_int 127)
+	(Helpers.marshal_int32 (Int32.of_int l)) s) s
 
   let wsframe_old s = modify (fun s -> 
     Printf.printf "frame: got %s\n" s; Printf.sprintf "\x00%s\xff" s) s
